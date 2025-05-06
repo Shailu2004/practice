@@ -1,8 +1,9 @@
-# Inserting data into HBase
-put 'flight_info', 'flight1', 'delay:departure_delay', '10'
-put 'flight_info', 'flight1', 'schedule:departure_time', '2025-05-06 08:00'
-put 'flight_info', 'flight1', 'schedule:arrival_time', '2025-05-06 11:00'
-
-put 'flight_info', 'flight2', 'delay:departure_delay', '5'
-put 'flight_info', 'flight2', 'schedule:departure_time', '2025-05-06 09:00'
-put 'flight_info', 'flight2', 'schedule:arrival_time', '2025-05-06 12:00'
+CREATE EXTERNAL TABLE flight_info_hive(
+    flight_id STRING,
+    departure_delay INT,
+    departure_time STRING,
+    arrival_time STRING
+)
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key,delay:departure_delay,schedule:departure_time,schedule:arrival_time")
+TBLPROPERTIES ("hbase.table.name" = "flight_info");
